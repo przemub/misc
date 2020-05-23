@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import bs4
+import requests
+import lxml
+
+def main():
+    site = requests.get("https://vndb.org/")
+    soup = bs4.BeautifulSoup(site.text, 'lxml')
+    quote = soup.select_one("div#footer > a")
+    
+    vn_site = requests.get("https://vndb.org" + quote['href'])
+    vn_soup = bs4.BeautifulSoup(vn_site.text, 'lxml')
+    title = vn_soup.select_one("td:contains('Title') + td")
+
+    print(quote.text)
+    print("~ " + title.text)
+
+if __name__ == "__main__":
+    main()
+
